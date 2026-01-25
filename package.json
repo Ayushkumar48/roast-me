@@ -64,6 +64,7 @@
 		"@node-rs/argon2": "^2.0.2",
 		"arctic": "^3.7.0",
 		"bits-ui": "^2.15.4",
+		"html-encoding-sniffer": "3.0.0",
 		"isomorphic-dompurify": "^2.35.0",
 		"marked": "^17.0.1",
 		"mode-watcher": "^1.1.0",
