@@ -40,7 +40,5 @@ export const roastVariants = [
 	}
 ];
 
-export const roastFor = ['spotify', 'valorant', 'github', 'leetcode'] as const;
-
 export type Region = (typeof REGIONS)[number];
 export type Platform = (typeof PLATFORMS)[number];

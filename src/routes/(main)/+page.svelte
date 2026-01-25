@@ -36,7 +36,7 @@
 				<Card.Content class="pt-0">
 					<div class="h-1 w-full rounded-full bg-linear-to-r {variant.gradient} mb-4"></div>
 					<Button
-						class="w-full bg-linear-to-r {variant.gradient} transition-opacity hover:opacity-90"
+						class="w-full bg-linear-to-r font-semibold text-white {variant.gradient} transition-opacity hover:opacity-90"
 						href={variant.path}
 					>
 						Roast My {variant.title}

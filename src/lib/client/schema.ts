@@ -39,3 +39,7 @@ export const valorantSchema = z.object({
 	name: z.string().min(2, { error: 'Username must be at least 2 characters long' }),
 	tag: z.string().min(1, { error: 'Tag must be at least 1 character long' })
 });
+
+export const leetcodeSchema = z.object({
+	username: z.string().min(1, { error: 'Username must be at least 1 character long' })
+});

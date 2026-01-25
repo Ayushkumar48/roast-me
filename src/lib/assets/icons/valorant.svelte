@@ -1,3 +1,7 @@
+<script lang="ts">
+	let { class: className = '' } = $props();
+</script>
+
 <svg
 	fill="#FF4655"
 	viewBox="0 0 32 32"
@@ -7,6 +11,7 @@
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	stroke="#FF4655"
+	class={className}
 	><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
 		id="SVGRepo_tracerCarrier"
 		stroke-linecap="round"

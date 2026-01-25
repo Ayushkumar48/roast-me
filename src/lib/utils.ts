@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { marked } from 'marked';
 import { twMerge } from 'tailwind-merge';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -52,4 +52,22 @@ export async function copyRoast(text: string) {
 
 export async function getSanitizedMarkdown(markdown: string) {
 	return DOMPurify.sanitize(await marked.parse(markdown));
+}
+
+export function getInitials(name: string) {
+	return name
+		.split(' ')
+		.map((word) => word[0])
+		.join('')
+		.toUpperCase();
+}
+
+export function formatDateAndTime(date: Date) {
+	return date.toLocaleString('en-US', {
+		minute: '2-digit',
+		hour: '2-digit',
+		day: '2-digit',
+		month: 'short',
+		year: 'numeric'
+	});
 }

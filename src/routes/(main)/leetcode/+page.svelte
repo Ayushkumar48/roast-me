@@ -7,48 +7,54 @@
 	import Copy from '@lucide/svelte/icons/copy';
 	import { Separator } from '$lib/components/ui/separator';
 	import { copyRoast, getSanitizedMarkdown, typewriterEffect } from '$lib/utils';
-	import { valorantSchema } from '$lib/client/schema';
+	import { leetcodeSchema } from '$lib/client/schema';
 	import { toast } from 'svelte-sonner';
-	import { getAccount } from './data.remote';
+	import { leetcode } from './data.remote';
 	import { onDestroy } from 'svelte';
-	import ValorantLogo from '$lib/assets/icons/valorant.svelte';
-	let valorantData = $state({
-		name: '',
-		tag: ''
+	import type { MatchedUser } from '@leetnotion/leetcode-api';
+	import * as Avatar from '$lib/components/ui/avatar/index.js';
+	import Leetcode from '$lib/assets/icons/leetcode.svelte';
+
+	let leetcodeData = $state({
+		username: ''
 	});
-	let valorantLoading = $state(false);
+	let leetcodeLoading = $state(false);
 	let roastResult = $state('');
+	let profile: MatchedUser | null = $state(null);
 	let cancelTypewriter: (() => void) | null = $state(null);
 
 	function setRoastResult(text: string) {
 		roastResult = text;
 	}
 
-	async function handleValorantSubmit() {
-		valorantLoading = true;
+	async function handleLeetCodeSubmit() {
+		leetcodeLoading = true;
 		if (cancelTypewriter) {
 			cancelTypewriter();
 			cancelTypewriter = null;
 		}
 		roastResult = '';
+		profile = null;
 
-		const validationResult = valorantSchema.safeParse(valorantData);
+		const validationResult = leetcodeSchema.safeParse(leetcodeData);
 		if (!validationResult.success) {
 			toast.error(validationResult.error.issues[0].message);
-			valorantLoading = false;
+			leetcodeLoading = false;
 			return;
 		}
 		try {
-			const res = await getAccount(valorantData);
-			if (res.error || !res.content) {
+			const res = await leetcode(leetcodeData.username);
+			if (res.error || !res.geminiResponse) {
 				toast.error(res.error || 'Unknown error');
 				return;
 			}
-			cancelTypewriter = typewriterEffect(res.content, setRoastResult);
+			profile = res.leetcodeUser;
+			cancelTypewriter = typewriterEffect(res.geminiResponse, setRoastResult);
 		} catch (error) {
 			console.error(error);
+			toast.error('An error occurred');
 		} finally {
-			valorantLoading = false;
+			leetcodeLoading = false;
 		}
 	}
 
@@ -64,14 +70,14 @@
 >
 	<form
 		class="flex w-full max-w-xl flex-col gap-6"
-		id="valorant-form"
-		onsubmit={handleValorantSubmit}
+		id="leetcode-form"
+		onsubmit={handleLeetCodeSubmit}
 	>
 		<Card.Root class="max-h-[80vh] overflow-auto rounded-sm">
 			<Card.Header>
 				<div class="flex items-start gap-4">
-					<ValorantLogo class="h-8 w-8" />
-					<Card.Title class="font-['Press Start 2P']">Valorant</Card.Title>
+					<Leetcode class="h-8 w-8" />
+					<Card.Title class="font-['Press Start 2P']">LeetCode</Card.Title>
 				</div>
 				<Card.Description>So you wanted to get roasted?</Card.Description>
 			</Card.Header>
@@ -79,48 +85,56 @@
 				<p class="pb-4 text-xs">Fill your data first.</p>
 				<FieldGroup>
 					<Field>
-						<FieldLabel for="valo-name">Name</FieldLabel>
+						<FieldLabel for="leetcode-username">Username</FieldLabel>
 						<Input
-							id="valo-name"
+							id="leetcode-username"
 							type="text"
-							placeholder="Enter your name"
-							bind:value={valorantData.name}
-						/>
-					</Field>
-					<Field>
-						<FieldLabel for="valo-tag">Tag</FieldLabel>
-						<Input
-							id="valo-tag"
-							type="text"
-							placeholder="Enter your tag"
-							bind:value={valorantData.tag}
+							placeholder="Enter your LeetCode username"
+							bind:value={leetcodeData.username}
 						/>
 					</Field>
 				</FieldGroup>
 			</Card.Content>
 			<Card.Footer class="flex justify-end gap-x-4">
-				<Button type="submit" disabled={valorantLoading}>Roast Me!</Button>
+				<Button type="submit" disabled={leetcodeLoading}>Roast Me!</Button>
 
 				<Button
 					type="button"
 					variant="outline"
-					disabled={valorantLoading}
+					disabled={leetcodeLoading}
 					onclick={() => {
 						if (cancelTypewriter) {
 							cancelTypewriter();
 							cancelTypewriter = null;
 						}
 						roastResult = '';
-						valorantData = {
-							name: '',
-							tag: ''
+						profile = null;
+						leetcodeData = {
+							username: ''
 						};
 					}}
 				>
 					Clear Current Data
 				</Button>
 			</Card.Footer>
-			{#if valorantLoading}
+			{#if profile}
+				<Separator />
+				<Card.Content>
+					<h3 class="text-lg font-semibold">Profile</h3>
+					<div class="mb-4 flex items-center gap-4">
+						<Avatar.Root class="h-16 w-16">
+							<Avatar.Image src={profile.profile?.userAvatar} alt="Avatar" />
+							<Avatar.Fallback>{profile.username.charAt(0).toUpperCase()}</Avatar.Fallback>
+						</Avatar.Root>
+						<div>
+							<p><strong>Username:</strong> {profile.username}</p>
+							<p><strong>Real Name:</strong> {profile.profile?.realName || 'Not provided'}</p>
+						</div>
+					</div>
+					<p><strong>About:</strong> {profile.profile?.aboutMe || 'Not provided'}</p>
+				</Card.Content>
+			{/if}
+			{#if leetcodeLoading}
 				<Separator />
 				<div class="flex items-center justify-center">
 					<Loader />

@@ -12,7 +12,7 @@ export async function getGeminiResponse(data: string) {
 
   Spotify: Judge their basic taste, embarrassing 'guilty pleasure' artists, or depressing listening habits.
 
-  GitHub: Roast their 'green wall' of empty commits or abandoned repos.
+  GitHub: Roast their 'green wall' of empty commits or abandoned repos. Don't make it generic, focus on their specific taste based on the profile. For example, if they have a lot of commits to a popular open-source project, roast them for their lack of contribution to the project.
 
   LeetCode: Mock their struggle with 'Easy' problems or lack of consistency.
 
@@ -22,7 +22,7 @@ export async function getGeminiResponse(data: string) {
 			model: GEMINI_MODEL,
 			contents: prompt,
 			config: {
-				maxOutputTokens: 400,
+				maxOutputTokens: 500,
 				temperature: 0.9
 			}
 		});

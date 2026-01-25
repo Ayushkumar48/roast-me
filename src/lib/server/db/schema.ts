@@ -1,5 +1,6 @@
-import { roastFor } from '$lib/client/enums';
 import { jsonb, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { roastFor } from './enums';
+import type { RoastSourceData } from '../schema';
 export const roastForEnum = pgEnum('roast_for', roastFor);
 
 export const user = pgTable('user', {
@@ -22,8 +23,8 @@ export const roastSource = pgTable('roast_source', {
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-	roastForId: roastForEnum().notNull(),
-	sourceData: jsonb('source_data').notNull()
+	roastFor: roastForEnum().notNull(),
+	sourceData: jsonb('source_data').$type<RoastSourceData>().notNull()
 });
 
 export const roasts = pgTable('roasts', {

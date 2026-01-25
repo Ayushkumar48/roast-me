@@ -36,12 +36,13 @@
 			const res = await login(loginData);
 			if (res?.error) {
 				toast.error(res.error);
+				return;
 			}
+			window.location.replace('/');
 		} catch (error) {
 			console.error(error);
 		} finally {
 			loginLoading = false;
-			window.location.replace('/');
 		}
 	}
 </script>

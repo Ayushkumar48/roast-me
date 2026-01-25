@@ -19,7 +19,7 @@ export const login = command(loginSchema, async (input) => {
 		if (!existingUser) {
 			return { error: 'Username does not exist' };
 		}
-		if (!verifyPassword(input.password, existingUser.password)) {
+		if (!(await verifyPassword(input.password, existingUser.password))) {
 			return { error: 'Invalid credentials' };
 		}
 		const sessionToken = generateSessionToken();
@@ -36,7 +36,6 @@ export const logout = command(async () => {
 	if (event.locals.session) {
 		try {
 			await invalidateSession(event.locals.session.id);
-			deleteSessionTokenCookie(event);
 		} catch (error) {
 			console.error(error);
 		} finally {

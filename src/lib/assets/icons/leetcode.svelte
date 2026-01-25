@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="leetcode">
+<script lang="ts">
+	let { class: className = '' } = $props();
+</script>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="leetcode" class={className}>
 	<path
 		fill="#B3B1B0"
 		d="M22 14.355c0-.742-.564-1.346-1.26-1.346H10.676c-.696 0-1.26.604-1.26 1.346s.563 1.346 1.26 1.346H20.74c.696.001 1.26-.603 1.26-1.346z"

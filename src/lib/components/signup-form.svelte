@@ -31,12 +31,13 @@
 			const res = await signup(signupData);
 			if (res?.error) {
 				toast.error(res.error);
+				return;
 			}
+			window.location.replace('/');
 		} catch (error) {
 			console.error(error);
 		} finally {
 			signupLoading = false;
-			window.location.replace('/');
 		}
 	}
 </script>
