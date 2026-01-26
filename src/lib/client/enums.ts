@@ -3,7 +3,7 @@ import Valorant from '$lib/assets/icons/valorant.svelte';
 import Github from '$lib/assets/icons/github.svelte';
 import Leetcode from '$lib/assets/icons/leetcode.svelte';
 
-export const PLATFORMS = ['PC', 'Console'] as const;
+export const PLATFORMS = ['PC', 'CONSOLE'] as const;
 export const REGIONS = ['eu', 'na', 'latam', 'br', 'ap', 'kr'] as const;
 export const roastVariants = [
 	{
